@@ -45,8 +45,13 @@ function App() {
 
     const addTodoHandler = (e) => {
         e.preventDefault();
-        setTodos([...todos, { text: inputText, completed: false, id: Math.random() * 1000 }]);
-        setInputText("");
+        if (inputText.trim() !== "") {
+            setTodos([...todos, { text: inputText, completed: false, id: Math.random() * 1000, editMode: false }]);
+            setInputText("");
+        } else {
+            // Show error response, for example:
+            alert("Please enter a non-empty task!");
+        }
     };
 
     const deleteHandler = (todo) => {
@@ -58,6 +63,28 @@ function App() {
             if (item.id === todo.id) {
                 return {
                     ...item, completed: !item.completed
+                };
+            }
+            return item;
+        }));
+    };
+
+    const editHandler = (todo) => {
+        setTodos(todos.map((item) => {
+            if (item.id === todo.id) {
+                return {
+                    ...item, editMode: !item.editMode
+                };
+            }
+            return item;
+        }));
+    };
+
+    const handleEditChange = (e, todo) => {
+        setTodos(todos.map((item) => {
+            if (item.id === todo.id) {
+                return {
+                    ...item, text: e.target.value
                 };
             }
             return item;
@@ -90,9 +117,21 @@ function App() {
                 <ul className="todo-list">
                     {filteredTodos.map(todo => (
                         <div className={`todo ${todo.completed ? "completed" : ""}`} key={todo.id}>
-                            <li className="todo-item">{todo.text}</li>
+                            {todo.editMode ? (
+                                <input
+                                    type="text"
+                                    value={todo.text}
+                                    onChange={(e) => handleEditChange(e, todo)}
+                                    className="todo-edit-input"
+                                />
+                            ) : (
+                                <li className="todo-item">{todo.text}</li>
+                            )}
                             <button className="complete-btn" onClick={() => completeHandler(todo)}>
                                 <i className="fas fa-check-circle"></i>
+                            </button>
+                            <button className="edit-btn" onClick={() => editHandler(todo)}>
+                                <i className="fas fa-edit"></i>
                             </button>
                             <button className="trash-btn" onClick={() => deleteHandler(todo)}>
                                 <i className="fas fa-trash"></i>
