@@ -54,45 +54,57 @@ function App() {
         }
     };
 
-    const deleteHandler = (todo) => {
-        setTodos(todos.filter((el) => el.id !== todo.id));
+    const deleteHandler = (id) => {
+        setTodos(todos.filter(todo => todo.id !== id));
     };
 
-    const completeHandler = (todo) => {
-        setTodos(todos.map((item) => {
-            if (item.id === todo.id) {
-                return {
-                    ...item, completed: !item.completed
-                };
-            }
-            return item;
-        }));
+    const completeHandler = (id) => {
+        setTodos(
+            todos.map(todo =>
+                todo.id === id ? { ...todo, completed: !todo.completed } : todo
+            )
+        );
     };
 
-    const editHandler = (todo) => {
-        setTodos(todos.map((item) => {
-            if (item.id === todo.id) {
-                return {
-                    ...item, editMode: !item.editMode
-                };
-            }
-            return item;
-        }));
+    const editHandler = (id) => {
+        setTodos(
+            todos.map(todo =>
+                todo.id === id ? { ...todo, editMode: !todo.editMode } : todo
+            )
+        );
     };
 
-    const handleEditChange = (e, todo) => {
-        setTodos(todos.map((item) => {
-            if (item.id === todo.id) {
-                return {
-                    ...item, text: e.target.value
-                };
-            }
-            return item;
-        }));
+    const handleEditChange = (e, id) => {
+        setTodos(
+            todos.map(todo =>
+                todo.id === id ? { ...todo, text: e.target.value } : todo
+            )
+        );
     };
 
     const clearAllHandler = () => {
         setTodos([]);
+    };
+
+    const handleDragStart = (e, index) => {
+        e.dataTransfer.setData("text/plain", index);
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
+
+    const handleDrop = (e, currentIndex) => {
+        e.preventDefault();
+        const draggedIndex = e.dataTransfer.getData("text/plain");
+        const draggedTodo = todos[draggedIndex];
+        
+        // Reorder todos
+        const newTodos = [...todos];
+        newTodos.splice(draggedIndex, 1);
+        newTodos.splice(currentIndex, 0, draggedTodo);
+        
+        setTodos(newTodos);
     };
 
     return (
@@ -115,25 +127,32 @@ function App() {
             </form>
             <div className="todo-container">
                 <ul className="todo-list">
-                    {filteredTodos.map(todo => (
-                        <div className={`todo ${todo.completed ? "completed" : ""}`} key={todo.id}>
+                    {filteredTodos.map((todo, index) => (
+                        <div
+                            className={`todo ${todo.completed ? "completed" : ""}`}
+                            key={todo.id}
+                            draggable="true"
+                            onDragStart={(e) => handleDragStart(e, index)}
+                            onDragOver={(e) => handleDragOver(e)}
+                            onDrop={(e) => handleDrop(e, index)}
+                        >
                             {todo.editMode ? (
                                 <input
                                     type="text"
                                     value={todo.text}
-                                    onChange={(e) => handleEditChange(e, todo)}
+                                    onChange={(e) => handleEditChange(e, todo.id)}
                                     className="todo-edit-input"
                                 />
                             ) : (
                                 <li className="todo-item">{todo.text}</li>
                             )}
-                            <button className="complete-btn" onClick={() => completeHandler(todo)}>
+                            <button className="complete-btn" onClick={() => completeHandler(todo.id)}>
                                 <i className="fas fa-check-circle"></i>
                             </button>
-                            <button className="edit-btn" onClick={() => editHandler(todo)}>
+                            <button className="edit-btn" onClick={() => editHandler(todo.id)}>
                                 <i className="fas fa-edit"></i>
                             </button>
-                            <button className="trash-btn" onClick={() => deleteHandler(todo)}>
+                            <button className="trash-btn" onClick={() => deleteHandler(todo.id)}>
                                 <i className="fas fa-trash"></i>
                             </button>
                         </div>
