@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './styles.css'; // Import the CSS file
 
 function App() {
     const [inputText, setInputText] = useState("");
@@ -12,7 +13,7 @@ function App() {
 
     useEffect(() => {
         filterHandler();
-        saveLocalTodos();
+        saveLocalTodos(); // Saving todos to local storage when todos or status change
     }, [todos, status]);
 
     const filterHandler = () => {
@@ -63,6 +64,10 @@ function App() {
         }));
     };
 
+    const clearAllHandler = () => {
+        setTodos([]);
+    };
+
     return (
         <div>
             <header>
@@ -81,7 +86,6 @@ function App() {
                     </select>
                 </div>
             </form>
-
             <div className="todo-container">
                 <ul className="todo-list">
                     {filteredTodos.map(todo => (
@@ -96,6 +100,9 @@ function App() {
                         </div>
                     ))}
                 </ul>
+            </div>
+            <div className="button-container">
+                <button className="clear-all-btn" onClick={clearAllHandler}>Clear All Tasks</button>
             </div>
         </div>
     );

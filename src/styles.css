@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -7,7 +9,7 @@
 body {
   background-color: #e9b483;
   color: white;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poetsen One', sans-serif;
   min-height: 100vh;
 }
 
@@ -29,7 +31,7 @@ form input, form button {
   font-size: 1.8rem;
   border: none;
   background: #25161b;
-  color: orange;
+  color: white;
   border-radius: 2rem;
   outline: none;
 }
@@ -41,8 +43,8 @@ form button {
 }
 
 form button:hover {
-  background: white;
-  color: #25161b;
+  background: #25161b;
+  color: orange;
 }
 
 .fa-plus-circle {
@@ -72,7 +74,7 @@ form button:hover {
   align-items: center;
   transition: 0.5s;
   border-radius: 2rem;
-  border: 2px solid #25161b; /* Added border */
+  border: 2px solid #25161b;
 }
 
 .todo li {
@@ -143,7 +145,7 @@ select {
 .select::after {
   content: "\25BC";
   position: absolute;
-  background: orange;
+  background: white;
   color: #25161b;
   top: 0;
   right: 0;
@@ -153,6 +155,24 @@ select {
 }
 
 .select:hover::after {
-  background: white;
+  background: orange;
   color: #25161b;
 }
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+.clear-all-btn {
+  background: #25161b;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  font-size: 1.2rem; 
+  transition: background 0.3s ease;
+}
+
+
