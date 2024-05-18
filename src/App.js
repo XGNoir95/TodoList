@@ -110,7 +110,7 @@ function App() {
     return (
         <div>
             <header>
-                <h1>My To Do List</h1>
+                <h1>XGNoir's To Do List</h1>
             </header>
             <form>
                 <input type="text" value={inputText} onChange={(e) => setInputText(e.target.value)} className="todo-input" />
